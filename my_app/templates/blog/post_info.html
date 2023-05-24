@@ -1,0 +1,30 @@
+{% extends '/layout.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+
+<div class="row mt-4 bg-black bg-opacity-25">
+    <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+        <div class="card text-bg-dark bg-opacity-75 p-lg-5 p-md-3">
+            <div class="card-title">
+                <h1 align="center">{{post.title}}</h1>
+            </div>
+            <div class="card-text">
+                {% for p in post.content.split('\n') %}
+                <p class="mx-3 lead">{{p}}</p>
+                {% endfor %}
+            </div>
+            {% if current_user.id == post.user_id %}
+            <div class="text-end">
+                <a href="{{url_for('blog.update_post', id=post.id)}}" class="btn btn-outline-warning">Edit</a>
+                <a href="{{url_for('blog.delete_post', id=post.id)}}" class="btn btn-outline-danger"
+                    onclick="return confirm('Delete this post?')">Delete</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

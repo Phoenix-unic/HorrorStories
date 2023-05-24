@@ -1,0 +1,30 @@
+{% extends '/layout.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+
+
+<div class="row mt-4 bg-black bg-opacity-25">
+    <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+        <h1 class="text-warning">Enjoy scary true stories </h1>
+        <hr>
+        {% for post in all_posts[::-1] %}
+        <article class="text-bg-dark bg-opacity-50 p-4">
+            <div class="content bg-black bg-opacity-10">
+                <span class="text-warning">By {{post.user.username}}, on {{post.date_created.strftime('%Y-%m-%d')}}</span>
+                <h3 class="">{{post.title}}</h3>
+                <p class="mx-2">{{post.content[:250]}}...</p>
+            </div>
+            <div class="buttons text-end">
+                <a href="{{url_for('blog.post_info', id=post.id)}}" class="btn btn-outline-warning">Read more</a>
+            </div>
+        </article>
+        {% if not loop.last %}
+        <hr class="text-warning">
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

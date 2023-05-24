@@ -1,0 +1,35 @@
+{% extends '/layout.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+
+<section class="row mt-4 bg-black bg-opacity-25">
+    <div class="col-lg-8 col-md-10 col-sm-12 px-0 mx-auto">
+        <div class="row mt-5">
+            <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+                <form class="form-control text-bg-dark bg-opacity-50" method="POST">
+                    <h3 align="center">Update article</h3>
+                    {{form.csrf_token}}
+                    <div class="form-control">
+                        {{form.title.label}}{{form.title}}
+                        {% for error in form.title.errors %}
+                        <span class="text-bg-danger">{{error}}</span>
+                        {% endfor %}
+
+                        {{form.content.label}}{{form.content}}
+                        {% for error in form.content.errors %}
+                        <span class="text-bg-danger">{{error}}</span>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-end">
+                        <button type="sumbit" class="btn btn-outline-success">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

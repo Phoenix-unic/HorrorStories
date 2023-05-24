@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block main %}
+
+<div class="row">
+    <div class="col-lg-4 col-md-8  mt-5 mx-auto">
+        <form class="form-control text-bg-dark bg-opacity-50" method="POST">
+            <h3 align="center">Login</h3>
+            {{form.csrf_token}}
+            <div class="form-group">
+                {{form.username.label}} {{form.username}}
+                {% for error in form.username.errors %} 
+                <span class="text-bg-danger">{{error}}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{form.password.label}} {{form.password}}
+                {% for error in form.password.errors %}
+                <span class="text-bg-danger">{{error}}</span>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-lg btn-outline-primary">Enter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

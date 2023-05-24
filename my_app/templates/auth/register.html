@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block main %}
+
+<div class="row">
+    <div class="col-lg-4 col-md-5 col-sm-6 mt-5 mx-auto">
+        <form class="form-control text-bg-dark bg-opacity-50" method="POST">
+            <h3 align="center">Sign up</h3>
+            {{form.csrf_token}}
+            <div class="form-group">
+                {{form.email.label}}{{form.email}}
+                {% for error in form.email.errors %} 
+                <span class="text-bg-warning">{{error}}</span>
+                {% endfor %} 
+            </div>
+            <div class="form-group">
+                {{form.username.label}}{{form.username}}
+                {% for error in form.username.errors %}
+                <span class="text-bg-warning">{{error}}</span>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{form.password.label}}
+                <div class="input-group">
+                    {{form.password}}
+                    {{form.password_r}}
+                </div>
+                {% for error in form.password_r.errors %}
+                <span class="text-bg-warning">{{error}}</span>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-lg btn-outline-success">Create account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

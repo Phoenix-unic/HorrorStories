@@ -1,0 +1,149 @@
+{% extends '/layout.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block main %}
+
+<div class="row mt-4 bg-black bg-opacity-25">
+    <div class="col-lg-8 col-md-10 col-sm-12 mx-auto">
+        <div class="row text-bg-dark bg-opacity-75 p-4">
+            <div class="d-flex justify-content-end">
+                <a href="{{url_for('blog.delete_profile', id=current_user.id)}}" class="text-danger mt-2"
+                    onclick="return confirm('Delete account and all posts?')">Delete account</a>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                <div class="col-lg-12 col-sm-6 mx-auto ">
+                    <img width="200" height="200" class="d-block rounded" src="{{url_for('static', filename='images/default-avatar.png')}}" alt="">
+                </div>
+            </div>
+            <div class="col-lg-8 d-flex flex-column">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link text-bg-dark bg-opacity-10 active" id="nav-info-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info"
+                            aria-selected="true">
+                            Info
+                        </button>
+                        <button class="nav-link text-bg-dark bg-opacity-10" id="nav-edit-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-edit" type="button" role="tab" aria-controls="nav-achievements"
+                            aria-selected="false">
+                            Edit
+                        </button>
+                        <button class="nav-link text-bg-dark bg-opacity-10" id="nav-password-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-password" type="button" role="tab" aria-controls="nav-info" aria-selected="true">
+                            Change password
+                        </button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab"
+                        tabindex="0">
+                        <table class="table text-bg-dark bg-opacity-10">
+                            <tr>
+                                <td>Username: </td>
+                                <td>{{current_user.username}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email adress: </td>
+                                <td>{{current_user.email}}</td>
+                            </tr>
+                            <tr>
+                                <td>Posts: </td>
+                                <td>{{data.get('posts_count')}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-edit" role="tabpanel" aria-labelledby="nav-edit-tab"
+                        tabindex="0">
+                        <div class="row">
+                            <div class="col-lg-6 offset-1 mt-lg-4 mt-md-2">
+                                <form action="{{url_for('blog.update_username_email', id=current_user.id)}}"
+                                    method="post" class="text-bg-dark bg-opacity-50">
+                                    {{data.get('username_email_form').csrf_token}}
+                                    <div class="form-group">
+                                        {{data.get('username_email_form').username.label}}{{data.get('username_email_form').username}}
+                                        {% for error in data.get('username_email_form').username.errors %}
+                                        <span class="text-bg-warning">{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{data.get('username_email_form').email.label}}{{data.get('username_email_form').email}}
+                                        {% for error in data.get('username_email_form').email.errors %}
+                                        <span class="text-bg-warning">{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-outline-success mx-2">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="nav-password" role="tabpanel" aria-labelledby="nav-password-tab" tabindex="0">
+                        <div class="row">
+                            <div class="col-lg-6 offset-1 mt-lg-4 mt-md-2">
+                                <form action="{{url_for('blog.update_password', id=current_user.id)}}" method="post"
+                                    class="text-bg-dark bg-opacity-50">
+                                    {{data.get('password_form').csrf_token}}
+                                    {{data.get('password_form').old_password.label}}
+                                    {{data.get('password_form').old_password}}
+                                    {% for error in data.get('password_form').old_password.errors %}
+                                    <span class="text-bg-danger">{{error}}</span>
+                                    {% endfor %}
+                            
+                                    {{data.get('password_form').new_password.label}}
+                                    <div class="input-group">
+                                        {{data.get('password_form').new_password}}
+                                        {{data.get('password_form').new_password_r}}
+                                    </div>
+                                    {% for error in data.get('password_form').new_password.errors %}
+                                    <span class="text-bg-danger">{{error}}</span>
+                                    {% endfor %}
+                                    <hr>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-outline-success mx-2">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <hr>
+        <h2 class="text-white">Your posts:</h2>
+        <hr>
+        <div class="row">
+            {% for post in data.get('user_posts')[::-1] %}
+            <article class="text-bg-dark bg-opacity-50 px-4 py-2">
+                <div class="content bg-black bg-opacity-10">
+                    <span class="text-warning">On {{post.date_created.strftime('%d-%m-%Y at %H:%M')}}</span>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5 class="">{{post.title}}</h5>
+                        </div>
+                        <div class="col-lg-6 text-end">
+                            <div class="btn-group text-end">
+                                <a href="{{url_for('blog.post_info', id=post.id)}}"
+                                    class="btn btn-outline-warning">Read</a>
+                                <a href="{{url_for('blog.update_post', id=post.id)}}"
+                                    class="btn btn-outline-success">Edit</a>
+                                <a href="{{url_for('blog.delete_post', id=post.id)}}" class="btn btn-outline-danger"
+                                    onclick="return confirm('Delete this post?')">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% if not loop.last %}
+            <hr class="text-warning">
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

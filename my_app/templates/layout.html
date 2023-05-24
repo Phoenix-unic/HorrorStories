@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="/static/images/favicon_io/site.webmanifest">
+</head>
+
+<body>
+    <header class="container-fluid">
+        <section class="row">
+            <div class="col-lg-10 col-md-12 px-0 mx-auto">
+                <nav class="navbar navbar-expand-sm navbar-dark text-bg-dark px-4 border-bottom">
+                    <span class="navbar-brand text-bg-dark text-warning">ScaryStory</span>
+                    <button class="navbar-toggler " type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarToggler">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a href="{{url_for('blog.index')}}" class="nav-link p-0 mx-2">Home</a>
+                            </li>
+                            {% if current_user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="{{url_for('blog.create_post')}}" class="nav-link p-0 mx-2">Add post</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <div class="d-flex justify-content-md-end">
+                            <ul class="navbar-nav">
+                                {% if current_user.is_authenticated %}
+                                <li class="navbar-item">
+                                    <div class="dropdown dropdown-header">
+                                        <button class="btn text-warning dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            {{current_user.username}}
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end text-bg-dark bg-opacity-75">
+                                            <li class="dropdown-item p-0">
+                                                <a href="{{url_for('auth.logout')}}"
+                                                    class="text-decoration-none text-white"><p class="px-2">Logout</p></a>
+                                            </li>
+                                            <li class="dropdown-item p-0">
+                                                <a href="{{url_for('blog.profile', id=current_user.id)}}"
+                                                    class="text-decoration-none text-white"><p class="px-2">Profile</p></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                {% else %}
+                                <li class="navbar-item">
+                                    <a class=" btn btn-outline-secondary m-1" href="{{url_for('auth.login')}}">Login</a>
+                                </li>
+                                <li class="navbar-item">
+                                    <a class=" btn btn-outline-secondary m-1"
+                                        href="{{url_for('auth.register')}}">Register</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                {% for category, message in get_flashed_messages(True) %}
+                <p class="flash px-5 bg-opacity-75 my-0 {{category}}">{{message}}</p>
+                {% endfor %}
+            </div>
+        </section>
+    </header>
+    <main class="container-fluid">
+        {% block main %}{% endblock %}
+    </main>
+    <footer class="container-fluid">
+        <section class="row">
+            <div class="col-lg-10 col-md-12 px-0 mx-auto">
+                <div
+                    class="d-flex flex-wrap bg-dark bg-opacity-50 justify-content-between align-items-center p-3 my-4 border-top">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <span class="mb-3 mb-md-0 text-white">© 2023 Phoenix, Inc.</span>
+                    </div>
+
+                    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                        <li class="ms-3">
+                            <a class="text-muted" href="https://twitter.com/" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="navbar-nav-svg"
+                                    viewBox="0 0 512 416.32" role="img">
+                                    <title>Twitter</title>
+                                    <path fill="white"
+                                        d="M160.83 416.32c193.2 0 298.92-160.22 298.92-298.92 0-4.51 0-9-.2-13.52A214 214 0 0 0 512 49.38a212.93 212.93 0 0 1-60.44 16.6 105.7 105.7 0 0 0 46.3-58.19 209 209 0 0 1-66.79 25.37 105.09 105.09 0 0 0-181.73 71.91 116.12 116.12 0 0 0 2.66 24c-87.28-4.3-164.73-46.3-216.56-109.82A105.48 105.48 0 0 0 68 159.6a106.27 106.27 0 0 1-47.53-13.11v1.43a105.28 105.28 0 0 0 84.21 103.06 105.67 105.67 0 0 1-47.33 1.84 105.06 105.06 0 0 0 98.14 72.94A210.72 210.72 0 0 1 25 370.84a202.17 202.17 0 0 1-25-1.43 298.85 298.85 0 0 0 160.83 46.92" />
+                                </svg>
+
+                            </a>
+                        </li>
+                        <li class="ms-3">
+                            <a class="text-muted" href="https://www.instagram.com/" target="_blank"><svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path fill="white"
+                                        d="M17.62 0H6.38C2.858 0 0 2.858 0 6.38v11.24C0 21.142 2.858 24 6.38 24h11.24c3.523 0 6.38-2.858 6.38-6.38V6.38C24 2.858 21.143 0 17.62 0zm4.808 17.62c0 2.66-2.17 4.828-4.828 4.828H6.38c-2.66 0-4.827-2.168-4.827-4.828V6.38C1.553 3.961 3.72 1.793 6.38 1.793H17.62c2.658 0 4.828 2.168 4.828 4.828v11.24z" />
+                                    <circle cx="11.994" cy="11.994" r="4.5" fill="white" />
+                                    <circle cx="18.645" cy="5.645" r="1.5" fill="white" />
+                                </svg>
+
+                            </a>
+                        </li>
+                        <li class="ms-3">
+                            <a class="text-muted" href="https://github.com/Phoenix-unic" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="navbar-nav-svg"
+                                    viewBox="0 0 512 499.36" role="img">
+                                    <title>GitHub</title>
+                                    <path fill="white" fill-rule="evenodd"
+                                        d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z" />
+                                </svg>
+
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </footer>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="github" viewBox="0 0 16 16">
+            <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+        </symbol>
+
+        <symbol id="twitter" viewBox="0 0 16 16">
+            <path
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
+        </symbol>
+
+        <symbol id="facebook" viewBox="0 0 16 16">
+            <path
+                d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+        </symbol>
+    </svg>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='js/script.js')}}"></script>
+</body>
+
+</html>
